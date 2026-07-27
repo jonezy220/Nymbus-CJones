@@ -91,7 +91,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 **Note on the checkout gate:** `/checkout` and all sub-routes require the `approvalStatus` cookie set during the underwriting step. Navigating directly to `/checkout` without completing Flow 1 redirects to `/`. This is enforced server-side in `proxy.ts`.
 
-**Live demo:** [https://nymbus-cjones.vercel.app](https://nymbus-cjones.vercel.app) *(link updated after deploy)*
+**Live demo:** [https://nymbus-cjones.vercel.app](https://nymbus-cjones.vercel.app)
 
 ---
 

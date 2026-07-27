@@ -125,13 +125,27 @@ The fix is to move the gate server-side. In Next.js 16, that means `proxy.ts` (r
 
 The broader lesson: any demo with a meaningful flow gate needs the gate enforced at the layer that actually controls request handling, not in client JavaScript that runs after the fact.
 
+### The Cash App Pay bug: automatic_payment_methods pulling in unwanted payment types
+
+The `create-payment-intent` route initially used `automatic_payment_methods: { enabled: true }`, which tells Stripe to enable every payment method the account is eligible for — including Cash App Pay, Affirm, and Klarna alongside Card. Stripe's Payment Element then defaulted to Cash App Pay as the selected tab, meaning card input fields were never visible on page load without manually switching tabs.
+
+This was diagnosed by ruling out several false leads in sequence: the API route returning a valid `clientSecret` was confirmed via console diagnostics (HTTP 200, valid response body, multiple times). The publishable key was confirmed baked into the client bundle by searching the production JS chunks. Browser caching was ruled out via hard reload. The breakthrough came from direct DOM inspection: a real, correctly-sized Stripe iframe (406×245px) was mounting and rendering — the integration was working, but showing the wrong payment method's panel.
+
+Fixed by changing `automatic_payment_methods: { enabled: true }` to `payment_method_types: ["card"]` server-side. The demo is specifically about the card path with documented test cards — there's no reason to offer Cash App Pay, Affirm, or Klarna. After the fix, the PaymentIntent only accepts card, and Stripe Elements renders the card number/expiry/CVC fields immediately on load with no tab switching.
+
+### The confirmation guard: preventing fabricated ledger records from direct navigation
+
+`/confirmation` could be reached by navigating directly — with no prior transaction, no query param, nothing in sessionStorage — and it would render a fully-formed, timestamped "Transaction confirmed" record with a real-looking ledger entry ID for a transaction that never happened. This undercuts the demo's own thesis: trust the ledger because it's the single source of truth. A confirmation view that fabricates plausible records when nothing real backs them is the opposite of what it's supposed to demonstrate.
+
+Fixed with the same server-side gate pattern as `/checkout`: a `paymentComplete` cookie (value `"card"` or `"financed"`) is set by the card success path and the financing accept path at the moment of real completion. `proxy.ts` checks for this cookie on `/confirmation` before any HTML is generated. Direct navigation without a completed transaction hits the gate and gets a clean 307 redirect to `/`, not a fabricated confirmation. The query param alone (`?type=card`) cannot bypass the gate — the cookie must be present.
+
 ### The Kiro session hook — and its honest limitations
 
 The hook (`lib/session-log.ts`) is an append-only JSONL logger that runs server-side, exposed through four helpers: `logPrompt`, `logDecision`, `logIteration`, `logMilestone`. It captures what actually happened during the build when invoked from API routes.
 
 The honest limitation: the hook was wired into the three API routes but not called from the UI build tasks (Tasks 5–12). Those were pure file-write operations with no server-side execution, so the log went quiet after the initial API testing. A back-fill of reconstructed entries was generated and then removed — a disclosed reconstruction isn't real-time capture, and the assignment is explicit on that point. What remains in `kiro-session.log` are the 4 genuine API test entries from early integration testing, plus 1 real entry documenting the redirect bug fix as it was diagnosed and resolved.
 
-In retrospect, the right approach is to call `logDecision` and `logMilestone` from real code at every meaningful step — not just from API routes, but from a build script or CI hook that fires as each task completes. Treating the hook as a one-time setup step rather than an ongoing discipline is the mistake made here.
+In retrospect, the right approach is to call `logDecision` and `logMilestone` from real code at every meaningful step — not just from API routes, but from a build script or CI hook that fires as each task completes. Treating the hook as a one-time setup step rather than an ongoing discipline is the mistake made here. The Cash App Pay fix and the confirmation guard fix (documented above) weren't captured in `kiro-session.log` either — the wiring gap already disclosed wasn't fully closed even after being identified. Those fixes are documented in this README rather than backfilled into the log, which keeps the log trustworthy as exactly what it claims to be.
 
 ---
 

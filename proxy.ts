@@ -11,9 +11,17 @@ export function proxy(req: NextRequest) {
     }
   }
 
+  // Gate /confirmation — require paymentComplete cookie set after a real card or financing success
+  if (pathname === "/confirmation") {
+    const paymentComplete = req.cookies.get("paymentComplete")?.value;
+    if (paymentComplete !== "card" && paymentComplete !== "financed") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/checkout", "/checkout/:path*"],
+  matcher: ["/checkout", "/checkout/:path*", "/confirmation"],
 };

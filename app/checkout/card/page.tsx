@@ -77,6 +77,7 @@ function CheckoutForm({ jobId }: { jobId: string }) {
       setSubmitting(false);
     } else {
       sessionStorage.setItem("paymentType", "card");
+      document.cookie = "paymentComplete=card; path=/; SameSite=Lax";
       router.push("/confirmation?type=card");
     }
   }

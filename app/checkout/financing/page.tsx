@@ -47,6 +47,7 @@ export default function FinancingPage() {
 
   function handleAccept() {
     sessionStorage.setItem("paymentType", "financed");
+    document.cookie = "paymentComplete=financed; path=/; SameSite=Lax";
     router.push("/confirmation?type=financed");
   }
 

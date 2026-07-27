@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
         customer: "Mr. Arnold Freeze",
         platform: "AirConPro",
       },
-      automatic_payment_methods: { enabled: true },
+      payment_method_types: ["card"],
     });
 
     logMilestone(

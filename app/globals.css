@@ -1,0 +1,76 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@300;400;500;600;700&display=swap");
+
+@import "tailwindcss";
+
+/* ─── Google Fonts loaded above tailwindcss per CSS @import ordering rules ── */
+
+/* ─── Nymbus Design System Tokens ──────────────────────────────────────────── */
+@theme inline {
+  /* Fonts */
+  --font-display: "DM Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: var(--font-geist-mono), "Geist Mono", monospace;
+
+  /* Bank brand colors */
+  --color-bank-primary: #2569EC;
+  --color-bank-primary-hover: #1E54BD;
+  --color-bank-primary-pressed: #163F8F;
+
+  /* Bank dark theme surfaces */
+  --color-bank-bg: #0D1117;
+  --color-bank-surface: #161B22;
+  --color-bank-surface-2: #21262D;
+  --color-bank-border: #30363D;
+  --color-bank-text: #E6EDF3;
+  --color-bank-text-muted: #8B949E;
+  --color-bank-text-subtle: #6E7681;
+
+  /* Status colors */
+  --color-success: #3FB950;
+  --color-success-bg: #0F2A18;
+  --color-error: #F85149;
+  --color-error-bg: #2A0F0F;
+  --color-warning: #D29922;
+  --color-warning-bg: #2A1F0A;
+
+  /* AirConPro brand colors (neutral SaaS palette) */
+  --color-acp-bg: #F8F9FA;
+  --color-acp-surface: #FFFFFF;
+  --color-acp-border: #E2E8F0;
+  --color-acp-primary: #0F766E;
+  --color-acp-primary-hover: #0D6B64;
+  --color-acp-text: #1A202C;
+  --color-acp-text-muted: #64748B;
+  --color-acp-accent: #F0FDF4;
+}
+
+/* ─── Base styles ───────────────────────────────────────────────────────────── */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: #0D1117;
+  color: #E6EDF3;
+}
+
+/* ─── Utility: bank-themed scrollbar ───────────────────────────────────────── */
+.bank-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.bank-scroll::-webkit-scrollbar-track {
+  background: var(--color-bank-surface);
+}
+.bank-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-bank-border);
+  border-radius: 3px;
+}
+
+/* ─── Geist Mono for data fields ───────────────────────────────────────────── */
+.font-data {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}

@@ -123,12 +123,33 @@ export default function CardCheckoutPage() {
         jobId: ARNOLD_FREEZE_JOB.jobNumber,
       }),
     })
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.clientSecret) setClientSecret(data.clientSecret);
-        else setError("Failed to initialize payment. Please try again.");
+      .then(async (r) => {
+        const text = await r.text();
+        console.error("[card-init] status:", r.status, "url:", r.url, "body:", text);
+        if (!r.ok) {
+          setError(`Failed to initialize payment. HTTP ${r.status}: ${text}`);
+          return;
+        }
+        let data: { clientSecret?: string; error?: string };
+        try {
+          data = JSON.parse(text);
+        } catch (parseErr) {
+          setError(`Failed to initialize payment. Response was not JSON: ${text.slice(0, 200)}`);
+          console.error("[card-init] JSON parse failed:", parseErr, "raw:", text);
+          return;
+        }
+        if (data.clientSecret) {
+          setClientSecret(data.clientSecret);
+        } else {
+          setError(`Failed to initialize payment. No clientSecret in response: ${JSON.stringify(data)}`);
+          console.error("[card-init] missing clientSecret, response:", data);
+        }
       })
-      .catch(() => setError("Failed to initialize payment. Please try again."));
+      .catch((err: unknown) => {
+        const msg = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+        console.error("[card-init] fetch threw:", err);
+        setError(`Failed to initialize payment. Fetch error: ${msg}`);
+      });
   }, []);
 
   return (

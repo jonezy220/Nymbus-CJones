@@ -125,30 +125,28 @@ export default function CardCheckoutPage() {
     })
       .then(async (r) => {
         const text = await r.text();
-        console.error("[card-init] status:", r.status, "url:", r.url, "body:", text);
         if (!r.ok) {
-          setError(`Failed to initialize payment. HTTP ${r.status}: ${text}`);
+          let detail = text;
+          try { detail = JSON.parse(text).error ?? text; } catch { /* use raw */ }
+          setError(`Unable to initialize payment (HTTP ${r.status}): ${detail}`);
           return;
         }
         let data: { clientSecret?: string; error?: string };
         try {
           data = JSON.parse(text);
-        } catch (parseErr) {
-          setError(`Failed to initialize payment. Response was not JSON: ${text.slice(0, 200)}`);
-          console.error("[card-init] JSON parse failed:", parseErr, "raw:", text);
+        } catch {
+          setError("Unable to initialize payment: unexpected server response.");
           return;
         }
         if (data.clientSecret) {
           setClientSecret(data.clientSecret);
         } else {
-          setError(`Failed to initialize payment. No clientSecret in response: ${JSON.stringify(data)}`);
-          console.error("[card-init] missing clientSecret, response:", data);
+          setError(data.error ?? "Unable to initialize payment: no client secret returned.");
         }
       })
       .catch((err: unknown) => {
-        const msg = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
-        console.error("[card-init] fetch threw:", err);
-        setError(`Failed to initialize payment. Fetch error: ${msg}`);
+        const msg = err instanceof Error ? err.message : "Network error";
+        setError(`Unable to initialize payment: ${msg}`);
       });
   }, []);
 

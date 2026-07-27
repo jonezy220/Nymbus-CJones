@@ -22,7 +22,9 @@ export interface LogEntry {
   tags?: string[];
 }
 
-const LOG_PATH = path.join(process.cwd(), "kiro-session.log");
+const LOG_PATH = process.env.VERCEL
+  ? "/tmp/kiro-session.log"   // Vercel functions have read-only cwd; /tmp is writable
+  : path.join(process.cwd(), "kiro-session.log");
 
 function writeEntry(entry: LogEntry): void {
   // Server-side only — fs is not available in browser/edge contexts

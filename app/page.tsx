@@ -28,16 +28,16 @@ export default function ProductOfferingPage() {
         </div>
 
         <h1 className="text-5xl font-bold leading-tight mb-5 mt-2" style={{ fontFamily: "'DM Sans', sans-serif", letterSpacing: "-0.02em" }}>
-          Your bank,<br />
-          <span style={{ color: "#2569EC" }}>inside their software.</span>
+          Our bank,<br />
+          <span style={{ color: "#2569EC" }}>inside your software.</span>
         </h1>
 
         <p className="text-lg leading-relaxed mb-4 max-w-2xl" style={{ color: "#8B949E", fontFamily: "'Inter', sans-serif" }}>
-          ABC Community Bank's PayFac-as-a-Service connector lets SaaS platforms embed payments and point-of-sale financing directly into their product — with funds settling natively on the bank's own ledger, not a third-party processor's.
+          ABC Community Bank's PayFac-as-a-Service connector lets your platform embed payments and point-of-sale financing directly into your product — with funds settling natively on our ledger, not a third-party processor's. One integration for your engineering team. Two capabilities for your users.
         </p>
 
         <p className="text-base leading-relaxed mb-10 max-w-xl" style={{ color: "#6E7681", fontFamily: "'Inter', sans-serif" }}>
-          One integration. Two capabilities. Every transaction a deposit and a potential lending relationship.
+          Every transaction becomes a deposit relationship. Every large-ticket job becomes a potential lending relationship. All of it invisible to your users — they just get paid.
         </p>
 
         <Link
@@ -68,14 +68,14 @@ export default function ProductOfferingPage() {
               PayFac-as-a-Service
             </h2>
             <p className="text-sm leading-relaxed mb-5" style={{ color: "#8B949E", fontFamily: "'Inter', sans-serif" }}>
-              Become the payment facilitator for SaaS platforms in your market. Your contractor, retailer, or service-business customers get paid inside the software they already use — and the funds land on your ledger from the first dollar.
+              Integrate once, and your users — contractors, retailers, service businesses — get paid without leaving your product. Funds land directly on our ledger from the first dollar. No third-party processor in the middle, no separate reconciliation step at month-end.
             </p>
             <ul className="space-y-2">
               {[
-                "Funds native to the bank's own core ledger",
-                "No third-party processor in the middle",
-                "Sub-merchant onboarding via existing depositor data",
-                "Card processing on your own PayFac rails",
+                "Your users get paid inside the product they already use",
+                "Funds native to our core ledger — nothing to reconcile",
+                "Existing depositors onboard in minutes, not days",
+                "Card processing on our own PayFac rails",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: "#8B949E", fontFamily: "'Inter', sans-serif" }}>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="mt-0.5 shrink-0" aria-hidden="true">
@@ -98,13 +98,13 @@ export default function ProductOfferingPage() {
               Point-of-Sale Financing
             </h2>
             <p className="text-sm leading-relaxed mb-5" style={{ color: "#8B949E", fontFamily: "'Inter', sans-serif" }}>
-              Offer embedded installment financing at the checkout moment — the same connector, the same ledger entry. A single large-ticket transaction becomes both a settled payment and a new lending relationship for the bank.
+              When your user closes a large-ticket job, their customer can apply for financing at checkout — inside your product, no redirect, no separate lender app. We make the credit decision and disburse directly to your user's account. Same connector, same ledger entry, same integration your team already built.
             </p>
             <ul className="space-y-2">
               {[
-                "Financing decision at checkout, not in a branch",
-                "Loan disbursement posts directly to merchant account",
-                "Consumer repays the bank — no third-party lender",
+                "Financing decision at checkout — no branch, no redirect",
+                "Disbursement posts directly to your user's account",
+                "Consumer repays us — zero collections burden on you",
                 "Same ledger record as a card settlement",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: "#8B949E", fontFamily: "'Inter', sans-serif" }}>
